@@ -18,7 +18,7 @@
 int led1 = 0;
 int led2 = 1;
 int led3 = 2;
-int sensor = A3;
+int sensor = A2;
 
 //Variables de intensidad de brillo y tiempo
 int brillo = 0;
@@ -37,7 +37,7 @@ void setup()
   pinMode(led2, OUTPUT);
   pinMode(led3, OUTPUT);
   sbi(GIMSK,PCIE); // Habilitar interrupción en modo CHANGE
-  sbi(PCMSK,PCINT3); // Pin afectado por interrupción
+  sbi(PCMSK,PCINT4); // Pin afectado por interrupción
 } 
 
 void loop()  
@@ -46,8 +46,8 @@ void loop()
   
   if(amor<1000)
   {
-    PCMSK &= ~(1<<PCINT3);   // Desabilitar interrupción
-    ritmo=map(amor,0,1000,100,800); //convertir a valores de rimo
+    PCMSK &= ~(1<<PCINT4);   // Desabilitar interrupción
+    ritmo=map(amor,0,1000,100,600); //convertir a valores de rimo
     tiempo=millis();
         
     for( brillo = 0; brillo < limBrillo; brillo = brillo + cantBrillo )//Incremento de brillo
@@ -63,14 +63,14 @@ void loop()
       delay(ritmo/100);
     }
     delay(ritmo/3);
-    digitalWrite(led3,HIGH);delayMicroseconds(200);digitalWrite(led3,LOW);
+    digitalWrite(led3,HIGH);delayMicroseconds(ritmo/5);digitalWrite(led3,LOW);
     delay(ritmo/3);
-    digitalWrite(led3,HIGH);delayMicroseconds(200);digitalWrite(led3,LOW);
+    digitalWrite(led3,HIGH);delayMicroseconds(ritmo/6);digitalWrite(led3,LOW);
     delay(ritmo/3); 
   }
   else
   {
-    sbi(PCMSK,PCINT3); // Turn on Pin Change interrupt
+    sbi(PCMSK,PCINT4); // Turn on Pin Change interrupt
     if(millis()-tiempo>intervalo) system_sleep(); 
     return; //Reiniciar programa
   }
